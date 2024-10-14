@@ -1,0 +1,336 @@
+%% LyX 2.3.2 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[twoside,spanish]{elsarticle}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\pagestyle{headings}
+\usepackage{float}
+\usepackage{amstext}
+\usepackage{amssymb}
+\PassOptionsToPackage{normalem}{ulem}
+\usepackage{ulem}
+
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+\newcommand{\noun}[1]{\textsc{#1}}
+\floatstyle{ruled}
+\newfloat{algorithm}{tbp}{loa}
+\providecommand{\algorithmname}{Algoritmo}
+\floatname{algorithm}{\protect\algorithmname}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+% specify here the journal
+\journal{Curso de <<An\'alisis de algoritmos>>, PUJ, Bogot\'a, Colombia - }
+
+% use this if you need line numbers
+
+\makeatother
+
+\usepackage{babel}
+\addto\shorthandsspanish{\spanishdeactivate{~<>}}
+
+\begin{document}
+
+\begin{frontmatter}{}
+
+\title{Proyecto de an\'alisis de algoritmos\tnoteref{t1,t2}}
+
+\tnotetext[t1]{Este documento presenta la escritura formal de un algoritmo.}
+
+\author[lfv]{Frank Hern\'andez}
+
+\ead{fs.hernandezl@javeriana.edu.co}
+
+\author[fdt]{Juliana Bejarano}
+
+\ead{juliana_bejarano@javeriana.edu.co}
+
+\address[lfv]{Pontificia Universidad Javeriana, Bogot\'a, Colombia}
+\begin{abstract}
+Este documento detalla el proceso de diseño de una version digital  del juego de cartas ''Uno Flip''. El juego admite entre 2 y 10 jugadores, ya sean humanos o controlados por inteligencia artificial (IA), y se centra en recrear la dinámica de cambio de color y valores, así como el uso de cartas especiales con efectos únicos. El proyecto cubre la implementación de la lógica central del juego, la interacción de los jugadores con el sistema y la gestión de los turnos y las cartas. Se describen las clases principales, el flujo de trabajo del juego, y las decisiones técnicas tomadas durante el diseño. 
+\end{abstract}
+\begin{keyword}
+Uno Flip, juego de cartas, inteligencia artificial, diseño de software, interacción multijugador, cartas especiales.
+\end{keyword}
+
+\end{frontmatter}{}
+
+\section{Descripción del juego}
+"Uno Flip" es una variante del clásico juego de cartas "Uno" que introduce un mazo de doble cara, con un lado claro y otro oscuro, cada uno con sus propias reglas y cartas especiales. Los jugadores intentan deshacerse de todas sus cartas mientras utilizan cartas de acción, como "Roba 2", "Cambio de dirección" y la clave carta "Flip", que voltea el mazo y obliga a jugar con el lado oscuro, donde las reglas son más desafiantes. El objetivo es ser el primero en quedarse sin cartas, mientras que los demás suman puntos según las cartas que les queden en mano. El problema principal a resolver es cómo trasladar esta dinámica del juego de mesa físico a una versión digital, permitiendo la participación de jugadores humanos y jugadores controlados por IA, y asegurando que el sistema gestione automáticamente los turnos, valide las jugadas según las reglas del juego y mantenga una experiencia fluida y competitiva. El juego se ejecutará en una sola máquina y no requerirá conexión en línea, permitiendo partidas con jugadores humanos y/o controlados por IA en un entorno local.
+
+
+\section{Requerimientos funcionales}
+
+\subsection{Inicio de juego}
+\begin{itemize}
+    \item \textbf{RF1.1}: El juego debe permitir seleccionar entre 2 y 10 jugadores.
+    \item \textbf{RF1.2}: El usuario podrá elegir el número de jugadores humanos y jugadores sintéticos.
+    \item \textbf{RF1.3}: El sistema debe permitir asignar nombres a los jugadores humanos.
+    \item \textbf{RF1.4}: Los jugadores sintéticos recibirán nombres predeterminados como "Jugador 1", "Jugador 2", etc.
+    \item \textbf{RF1.5}: Antes de empezar la partida, el sistema debe mezclar el mazo y distribuir 7 cartas a cada jugador.
+    \item \textbf{RF1.6}: El sistema debe determinar aleatoriamente el orden de los turnos iniciales.
+\end{itemize}
+
+\subsection{Manejo del mazo}
+\begin{itemize}
+    \item \textbf{RF2.1}: El sistema debe generar un mazo de cartas con dos lados (claro y oscuro).
+    \item \textbf{RF2.2}: El mazo debe contener cartas de los cuatro colores (rojo, azul, verde, amarillo) y cartas numéricas (0-9), además de las cartas especiales.
+    \item \textbf{RF2.3}: Las cartas especiales deben incluir:
+    \begin{itemize}
+         \item Lado claro: +2, saltar, invertir, cambio de color.
+         \item Lado oscuro: +5, saltar a todos, cambio de color oscuro.
+         \item Cartas Flip: cambian el lado del mazo entre claro y oscuro.
+    \end{itemize}
+    \item \textbf{RF2.4}: El sistema debe gestionar las pilas de mazo y cartas descartadas.
+\end{itemize}
+
+\subsection{Turno de los jugadores}
+\begin{itemize}
+    \item \textbf{RF3.1}: El sistema debe controlar los turnos en sentido horario (por defecto) o en sentido antihorario cuando se juegue una carta de inversión.
+    \item \textbf{RF3.2}: En su turno, un jugador puede jugar una carta que coincida en color, número o tipo con la carta en la pila de descartes.
+    \item \textbf{RF3.3}: Si el jugador no puede jugar una carta, debe robar una carta del mazo. 
+    \item \textbf{RF3.4}: Los jugadores IA deben seguir una lógica predefinida para decidir qué carta jugar. 
+    \item \textbf{RF3.5}: Las cartas especiales deben aplicarse según las reglas: 
+    \begin{itemize}
+         \item +2: El siguiente jugador roba 2 cartas y pierde su turno.
+         \item +5: El siguiente jugador roba 5 cartas y pierde su turno.
+         \item Saltar: El siguiente jugador pierde su turno.
+         \item Saltar a todos: Todos los jugadores pierden un turno y el turno regresa al jugador que jugó la carta.
+         \item Invertir: Invierte el orden de los turnos.
+         \item Cambio de color: El jugador elige el color del siguiente turno. 
+    \end{itemize}
+\end{itemize} 
+
+\subsection{Cambios de lado del mazo}
+\begin{itemize}
+    \item \textbf{RF4.1}: Cuando se juegue una carta Flip, el sistema debe cambiar el mazo de cartas del lado claro al lado oscuro (o viceversa).
+    \item \textbf{RF4.2}: Todas las cartas en manos de los jugadores también deben "voltearse", mostrando el nuevo lado activo.
+\end{itemize}
+
+\subsection{Finalizacion del juego}
+\begin{itemize}
+    \item \textbf{RF5.1}: El juego termina cuando uno de los jugadores se queda sin cartas.
+    \item \textbf{RF5.2}: El sistema debe declarar al ganador y mostrar las cartas restantes de los otros jugadores.
+\end{itemize}
+
+\subsection{Pantalla de puntuación}
+\begin{itemize}
+    \item \textbf{RF6.1}: Al finalizar la partida, debe aparecer una pantalla con la clasificación de los jugadores, mostrando el número de cartas restantes.
+    \item \textbf{RF6.2}: El sistema debe ofrecer opciones para iniciar una nueva partida o salir del juego.
+\end{itemize}
+
+\subsection{Inteligencia Artificial (IA)}
+\begin{itemize}
+    \item \textbf{RF7.1}: Los jugadores IA deben ser capaces de:
+    \begin{itemize}
+        \item Jugar cartas que coincidan con el color, número o tipo.
+        \item Priorizar las cartas especiales para afectar a los otros jugadores.
+        \item Usar la lógica para cambiar el color del juego cuando sea ventajoso.
+        \item Robar cartas si no pueden jugar ninguna carta válida.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Configuración}
+\begin{itemize}
+    \item \textbf{RF8.1}: El sistema debe permitir la configuración inicial de la cantidad de jugadores humanos y sintéticos.
+    \item \textbf{RF8.2}: Los nombres de los jugadores humanos deben ser personalizables al inicio de la partida.
+\end{itemize}
+
+
+\section{Requerimientos no funcionales}
+\subsection{Usabilidad}
+\begin{itemize}
+    \item \textbf{RNF1.1}: La interfaz debe ser intuitiva, permitiendo a los jugadores humanos indicar cartas, ver sus cartas disponibles, y entender el estado del juego.
+    \item \textbf{RNF1.2}: Los jugadores sintéticos deben realizar sus jugadas automáticamente, mostrando las cartas jugadas en la interfaz.
+\end{itemize}
+
+\subsection{Rendimiento}
+\begin{itemize}
+    \item \textbf{RNF2.1}: El sistema debe poder manejar partidas con 2 hasta 10 jugadores sin afectar el rendimiento.
+    \item \textbf{RNF2.2}: Los cambios entre el lado claro y oscuro del mazo deben ser instantáneos.
+\end{itemize}
+
+\subsection{Portabilidad}
+\begin{itemize}
+    \item \textbf{RNF3.1}: El juego debe ser ejecutable en plataformas Windows, Linux y MacOS.
+\end{itemize}
+
+\subsection{Seguridad}
+\begin{itemize}
+    \item \textbf{RNF4.1}: El sistema debe validar las jugadas de los jugadores humanos, asegurando que solo jueguen cartas válidas.
+\end{itemize}
+
+\subsection{Interfaz del usuario}
+\begin{itemize}
+    \item \textbf{RNF5.1}: La interfaz debe mostrar:
+    \begin{itemize}
+        \item Cartas disponibles de cada jugador en cada uno de sus turnos.
+        \item Carta actual en la pila de descartes.
+        \item Estado del turno (quién es el siguiente jugador).
+        \item Lado activo del mazo (claro u oscuro).
+    \end{itemize}
+    \item \textbf{RNF5.2}: Los jugadores sintéticos deben aparecer en la interfaz con sus decisiones y jugadas visibles.
+\end{itemize}
+
+
+\section{Restricciones}
+\begin{itemize}
+    \item \textbf{R1}: No debe permitirse partidas con más de 10 jugadores
+    \item \textbf{R2}: El juego debe estar diseñado para funcionar en una sola máquina, sin conexión en red.
+    \item \textbf{R2}: El juego debe respetar estrictamente las reglas del “Uno Flip” oficial.
+\end{itemize}
+
+\section{Casos de uso}
+\begin{figure} [H]
+    \centerline {\includegraphics[width=0.6\columnwidth]{Casos de uso.jpg}}
+    \caption{Diagrama casos de uso}
+    \label{fig}
+\end{figure}
+\subsection{Actores}
+\begin{enumerate}
+    \item Jugador (humano): Un jugador humano que interactúa con el juego.
+    \item Jugador IA (sintético): Un jugador controlado por el sistema.
+    \item Sistema de jugo: El motor que gestiona la lógica del juego, las cartas y el flujo de los turnos.
+\end{enumerate}
+\subsection{Descripción casos de uso}
+\begin{enumerate}
+    \item \textbf {Iniciar partida}
+    \begin{itemize}
+        \item El jugador humano inicia el juego.
+        \item Flujo de eventos:
+        \begin{enumerate}
+            \item El jugador selecciona la opción de iniciar una nueva partida.
+            \item El sistema despliega las opciones de configuración.
+        \end{enumerate}
+    \end{itemize}
+    \item \textbf {Seleccionar número de jugadores}
+    \begin{itemize}
+        \item El jugador humano selecciona el número de participantes (humanos y/o IA).
+        \item Flujo de eventos:
+        \begin{enumerate}
+            \item El jugador elige entre 2 y 10 jugadores.
+            \item Se seleccionan los jugadores IA y/o humanos.
+            \item El sistema procede a la configuración de los nombres.
+        \end{enumerate}
+    \end{itemize}
+    \item \textbf {Repartir cartas}
+    \begin{itemize}
+        \item El sistema reparte 7 cartas a cada jugador.
+        \item Flujo de eventos:
+        \begin{enumerate}
+            \item El mazo de cartas se mezcla.
+            \item Se reparten 7 cartas a cada jugador (humano e IA).
+            \item Se coloca la primera carta en la pila de descartes. 
+        \end{enumerate}
+    \end{itemize}
+    \item \textbf {Tomar turno}
+    \begin{itemize}
+        \item Cada jugador (humano o IA) debe jugar una carta o robar una del mazo.
+        \item Flujo de eventos:
+        \begin{enumerate}
+            \item Es el turno de un jugador (humano o IA).
+            \item El jugador juega una carta valida o roba una del mazo.
+            \item El turno pasa al siguiente jugador. 
+        \end{enumerate}
+    \end{itemize}
+    \item \textbf {Jugar carta}
+    \begin{itemize}
+        \item El jugador juega una carta que coincida en color, número o tipo con la que está en la pila de descartes.
+        \item Flujo de eventos:
+        \begin{enumerate}
+            \item El jugador no tiene una carta valida.
+            \item El sistema valida si es una carta de número o una carta especial.
+            \item Se aplican los efectos de la carta jugada (si es una carta especial).
+        \end{enumerate}
+    \end{itemize}
+    \item \textbf {Robar carta}
+    \begin{itemize}
+        \item Si el jugador no tiene una carta valida para jugar, debe robar una carta del mazo.
+        \item Flujo de eventos:
+        \begin{enumerate}
+            \item El jugador no tiene una carta valida.
+            \item El jugador roba una carta del mazo.
+            \item Si puede jugar la carta robada, la juega. De lo contrario, el turno pasa el siguiente jugador. 
+        \end{enumerate}
+    \end{itemize}
+    \item \textbf {Aplicar efectos de carta especial}
+    \begin{itemize}
+        \item Cuando un jugador juega una carta especial, el sistema aplica los efectos correspondientes.
+        \item Cartas especiales:
+        \begin{enumerate}
+            \item +2: El siguiente jugador roba dos cartas y pierde su turno.
+            \item +5: El siguiente jugador roba cinco cartas y pierde su turno.
+            \item Saltar: El siguiente jugador pierde su turno.
+            \item Invertir: El orden de los turnos se invierte.
+            \item Cambio de color: El jugador elige el color del siguiente turno.
+            \item Flip: Cambia el lado del mazo (claro a oscuro y viceversa).
+        \end{enumerate}
+    \end{itemize}
+    \item \textbf {Cambiar lado del mazo}
+    \begin{itemize}
+        \item Cuando se juega una carta Flip, el sistema cambia el lado activo del mazo entre claro y oscuro.
+        \item Flujo de eventos:
+        \begin{enumerate}
+            \item Un jugador juega una carta Flip.
+            \item El sistema voltea todas las cartas y cambia el mazo al lado oscuro (o claro).
+            \item El juego continúa con el nuevo lado activo.
+        \end{enumerate}
+    \end{itemize}
+    \item \textbf {Terminar la partida}
+    \begin{itemize}
+        \item El juego termina cuando un jugador se queda sin cartas
+        \item Flujo de eventos:
+        \begin{enumerate}
+            \item Un jugador se queda sin cartas disponibles. 
+            \item El sistema finaliza el juego.
+            \item Se muestra el jugador.
+        \end{enumerate}
+    \end{itemize}
+    \item \textbf {Declarar jugador}
+    \begin{itemize}
+        \item Al finalizar el juego, el sistema declara al ganador.
+        \item Flujo de eventos:
+        \begin{enumerate}
+            \item Els sitema revisa el estado de las manos de los jugadores. 
+            \item El jugador que se quedo sin cartas es declarado ganador.
+            \item Se despliegan los resultados con el numero de cartas con el que quedaron los de demas jugadores.
+        \end{enumerate}
+    \end{itemize}    
+\end{enumerate}
+
+
+\section{Diagrama de flujo}
+\begin{figure} [H]
+    \centerline {\includegraphics[width=0.6\columnwidth]{Diagrama de flujo.jpg}}
+    \caption{Diagrama de flujo}
+    \label{fig}
+\end{figure}
+\subsection{Descripción del flujo}
+\begin{enumerate}
+    \item Inicio: El juego comienza.
+    \item Iniciar partida: Se inicia juego.
+    \item Seleccionar número de jugadores: Los jugadores eligen cuántos participarán.
+    \item Repartir cartas: Se reparten las cartas a cada jugador.
+    \item Tomar turno: Un jugado intenta jugar en carta.
+    \item Jugar carta: El jugador intenta jugar una carta.
+    \item Carta valida?: Se verifica si la carta jugada es válida.
+    \begin{itemize}
+        \item Si \textbf{sí}, la carta se juega.
+        \item si \textbf{no}, el jugador roba una carta.
+    \end{itemize}
+    \item Fin de turno? Se verifica si el turno ha terminado.
+    \begin{itemize}
+        \item Si \textbf{sí}, se termina la partida y se declara al jugador
+        \item si \textbf{no}, el juego continúa hasta que se cumplan las condiciones para terminar.
+    \end{itemize}
+    \item Declarar ganador: Se determina y se declara al ganador.
+    \item Fin: Se termina el juego.
+\end{enumerate}
+
+
+\end {document}
