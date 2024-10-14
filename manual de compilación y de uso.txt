@@ -1,0 +1,141 @@
+Requisitos previos
+
+Antes de compilar y ejecutar el programa de UNO Flip, asegúrate de que tienes las siguientes herramientas instaladas en tu computadora:
+
+1. Python 3.6 o superior: El lenguaje en el que está escrito el programa es Python, por lo que necesitas tener una versión reciente instalada.
+
+Paso 1: Instalar Python
+
+Si no tienes Python instalado, sigue los pasos a continuación:
+
+Para Windows:
+1. Ve al [sitio oficial de Python](https://www.python.org/downloads/) y descarga la última versión de Python 3.x.
+2. Ejecuta el instalador descargado.
+3. IMPORTANTE: Durante la instalación, asegúrate de marcar la casilla que dice **"Add Python to PATH"**.
+4. Finaliza la instalación.
+
+Para Mac:
+1. Abre la terminal y escribe el siguiente comando para instalar Python usando Homebrew:
+   ```bash
+   brew install python
+   ```
+
+Para Linux (Ubuntu/Debian):
+1. Abre la terminal y ejecuta el siguiente comando:
+   ```bash
+   sudo apt update
+   sudo apt install python3
+   ```
+
+Verificar instalación:
+1. Abre una terminal (o el CMD en Windows) y ejecuta el siguiente comando:
+   ```bash
+   python --version
+   ```
+   Deberías ver algo como `Python 3.x.x`. Esto confirma que Python está instalado correctamente.
+
+Paso 2: Descargar el código fuente
+
+El código del programa debe estar disponible en algún archivo o repositorio. A continuación, se indican dos formas de obtenerlo.
+
+Opción 1: Usar un archivo .py directamente
+- Descarga el archivo del código fuente del programa (con extensión `.py`) desde donde esté alojado.
+
+Opción 2: Clonar un repositorio desde GitHub
+- Si el código está disponible en un repositorio de GitHub, puedes clonarlo utilizando el siguiente comando:
+  ```bash
+  git clone https://github.com/Frank5005/Proyecto-Analisis-de-Algoritmos-2024-2.git
+  ```
+
+  Esto descargará todos los archivos del proyecto en tu computadora.
+
+Paso 3: Ejecutar el programa
+
+Una vez tengas el archivo del programa en tu computadora, puedes proceder a ejecutarlo.
+
+Ejecución en Windows, Mac o Linux:
+1. Abre una terminal o el CMD (en Windows).
+2. Navega a la carpeta donde has descargado el archivo del programa usando el comando `cd`.
+   - Ejemplo:
+     ```bash
+     cd ruta/a/la/carpeta
+     ```
+3. Ejecuta el archivo con Python usando el siguiente comando:
+   ```bash
+   python uno_flip.py
+   ```
+   - Si tu instalación de Python requiere `python3`, usa:
+     ```bash
+     python3 uno_flip.py
+     ```
+
+4. El programa comenzará a ejecutarse en tu terminal o consola.
+
+---
+
+Instrucciones para usar el programa
+
+Una vez que el programa está ejecutándose en la consola, debes seguir estos pasos para jugar una partida de UNO Flip:
+
+1. Selección de jugadores
+- El programa te pedirá que ingreses la cantidad de jugadores (entre 2 y 10). 
+- Debes escribir un número y presionar Enter.
+
+2. Selección de jugadores humanos y sintéticos
+- El programa te pedirá que indiques cuántos jugadores son humanos y cuántos son sintéticos (jugadores controlados por el programa). Debes asegurarte de que la suma coincida con el número de jugadores que ingresaste anteriormente.
+- Para cada jugador humano, el programa te pedirá que ingreses un nombre.
+
+3. Comienzo del juego
+- El juego comenzará y el programa asignará las cartas a cada jugador.
+- El programa seleccionará quién comenzará a jugar con base en las cartas asignadas, mostrando quién será el primer jugador y en qué orden jugarán los demás.
+
+4. Turno de cada jugador
+- En cada turno, el programa te mostrará:
+  - Las cartas que tienes en la mano.
+  - La carta superior de la pila de descartes.
+- Deberás seleccionar una carta de tu mano que sea válida según las reglas del juego.
+  - Si no tienes cartas jugables, el programa te lo indicará y te pedirá que tomes una carta del mazo.
+
+5. Cartas especiales
+- Las cartas especiales del juego (como +2, +5, flip, y otras) tienen efectos especiales que el programa aplicará automáticamente.
+  - Si un jugador juega un flip, el mazo cambiará de lado (del lado claro al lado oscuro o viceversa).
+  - Si un jugador juega un +2 o +5, el siguiente jugador tendrá que robar cartas y perder su turno.
+
+6. Continuación del juego
+- El juego continúa pasando de un jugador a otro hasta que alguien se quede sin cartas.
+- Si has configurado un objetivo de puntos al inicio, el juego continuará hasta que un jugador alcance el objetivo de puntos sumando las cartas de los demás jugadores.
+
+7. Finalización del juego
+- El juego termina cuando:
+  - Un jugador se queda sin cartas.
+  - Se alcanza el objetivo de puntos (si se especificó al inicio).
+- Al finalizar, el programa mostrará las puntuaciones y declarará al ganador.
+
+---
+
+Consejos adicionales
+
+- Interrupción del juego: Si en algún momento deseas detener la ejecución del programa, puedes presionar Ctrl + C en la consola.
+- Errores comunes: Si el programa no se ejecuta correctamente o te muestra errores, revisa los siguientes puntos:
+  - Asegúrate de que el archivo del código esté en la misma carpeta desde la que estás ejecutando el programa.
+  - Verifica que estés utilizando la versión correcta de Python.
+  - Asegúrate de escribir correctamente los nombres de los archivos y los comandos en la terminal.
+
+---
+
+Preguntas frecuentes
+
+1. ¿Qué pasa si no tengo una carta jugable?
+   - Si no tienes una carta válida para jugar, el programa te pedirá que tomes una carta del mazo. Si esa carta es jugable, podrás usarla inmediatamente.
+
+2. ¿Qué es una carta 'flip'?
+   - La carta flip cambia el lado del mazo de cartas, alternando entre el lado claro y el lado oscuro, lo que afecta las cartas que pueden ser jugadas.
+
+3. ¿Cómo se manejan las cartas especiales (+2, +5, reversa, etc.)?
+   - Las cartas especiales se manejan automáticamente por el programa. Si juegas una carta especial, el siguiente jugador deberá seguir las reglas correspondientes (robar cartas, perder el turno, etc.).
+
+---
+
+Conclusión
+
+Con este manual de compilación y uso, deberías poder ejecutar y jugar una partida completa de UNO Flip sin ningún inconveniente. Si sigues todos los pasos descritos, el programa funcionará correctamente en tu sistema.
